@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -100,7 +100,7 @@ function CheckoutForm({ tier }: { tier: string }) {
   );
 }
 
-export default function BuyPage() {
+function BuyPageInner() {
   const { status } = useSession();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -184,5 +184,13 @@ export default function BuyPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function BuyPage() {
+  return (
+    <Suspense fallback={<Spinner />}>
+      <BuyPageInner />
+    </Suspense>
   );
 }
