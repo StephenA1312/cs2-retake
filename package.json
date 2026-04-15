@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:cf": "npx @opennextjs/cloudflare build && cp -r .open-next/assets/. .open-next/ && mv .open-next/worker.js .open-next/_worker.js",
+    "build:cf": "npx @opennextjs/cloudflare build && cp -r .open-next/assets/. .open-next/ && mv .open-next/worker.js .open-next/_worker.js && echo '{\"version\":1,\"include\":[\"/*\"],\"exclude\":[\"/_next/static/*\",\"/_next/data/*\",\"/favicon.ico\",\"/*.svg\"]}' > .open-next/_routes.json",
     "deploy": "npm run build:cf && wrangler pages deploy",
     "start": "next start",
     "lint": "eslint",
