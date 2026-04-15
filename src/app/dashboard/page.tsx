@@ -51,6 +51,8 @@ const IconUser = () => (
   </svg>
 );
 
+const ADMIN_STEAM_IDS = (process.env.ADMIN_STEAM_IDS ?? "").split(",").filter(Boolean);
+
 function formatDate(ts: number) {
   return new Date(ts * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
@@ -60,6 +62,7 @@ export default async function Dashboard() {
   if (!session?.user) redirect("/signin");
 
   const user = session.user as { id?: string; name?: string | null; image?: string | null };
+  const isAdmin = ADMIN_STEAM_IDS.includes(user.id ?? "");
 
   const db = await getDb();
   const dbUser = await db.select().from(users).where(eq(users.steamId, user.id ?? "")).get();
@@ -252,6 +255,14 @@ export default async function Dashboard() {
             >
               ← Home
             </a>
+            {isAdmin && (
+              <a
+                href="/dashboard/admin"
+                className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 text-primary px-4 py-2 text-xs font-medium hover:bg-primary/20 transition-colors"
+              >
+                Admin
+              </a>
+            )}
           </div>
         </div>
       </main>
