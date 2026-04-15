@@ -1,26 +1,123 @@
 @import "tailwindcss";
 
+/*
+  BB Manual Mono™ — commercial font by BB-Supply (bb-supply.eu)
+  Add your licensed .woff2 files to /public/fonts/ to activate.
+  Falls back to IBM Plex Mono automatically.
+*/
+@font-face {
+  font-family: "BB Manual Mono";
+  src: url('/fonts/BBManualMono-Regular.woff2') format('woff2'),
+       url('/fonts/BBManualMono-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "BB Manual Mono";
+  src: url('/fonts/BBManualMono-Medium.woff2') format('woff2'),
+       url('/fonts/BBManualMono-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "BB Manual Mono";
+  src: url('/fonts/BBManualMono-SemiBold.woff2') format('woff2'),
+       url('/fonts/BBManualMono-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "BB Manual Mono";
+  src: url('/fonts/BBManualMono-Bold.woff2') format('woff2'),
+       url('/fonts/BBManualMono-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0f;
+  --foreground: #e5e5e5;
+  --primary: #ff6b35;
+  --primary-foreground: #0a0a0f;
+  --muted: #1a1a2e;
+  --muted-foreground: #8888aa;
+  --border: #2a2a3e;
+  --card: #12121a;
+  --card-foreground: #e5e5e5;
+  --accent: #ff6b35;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-accent: var(--accent);
+  --font-heading: var(--font-bb-mono);
+  --font-mono: var(--font-bb-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "BB Manual Mono", var(--font-bb-mono), monospace;
+  line-height: 1.6;
+}
+
+.font-heading {
+  font-family: "BB Manual Mono", var(--font-bb-mono), monospace;
+}
+
+/* Card component styles */
+.bg-card {
+  background-color: var(--card);
+}
+
+.text-card-foreground {
+  color: var(--card-foreground);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.bg-primary\/10 {
+  background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+}
+
+.border-primary\/20 {
+  border-color: color-mix(in srgb, var(--primary) 20%, transparent);
+}
+
+.border-primary\/50 {
+  border-color: color-mix(in srgb, var(--primary) 50%, transparent);
+}
+
+.bg-primary\/80 {
+  background-color: color-mix(in srgb, var(--primary) 80%, transparent);
+}
+
+.text-primary\/80 {
+  color: color-mix(in srgb, var(--primary) 80%, transparent);
 }

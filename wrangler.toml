@@ -1,0 +1,8 @@
+name = "cs2retake"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "cs2retake"
+database_id = "c1732ee3-2f1c-4131-9f7c-e12a0ddfa58a"
