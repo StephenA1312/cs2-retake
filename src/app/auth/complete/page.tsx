@@ -1,5 +1,5 @@
 import { verifySteamToken } from "@/lib/steam-token";
-import { signIn } from "@/app/api/auth/[...nextauth]/route";
+import { signIn } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
 export default async function AuthCompletePage({

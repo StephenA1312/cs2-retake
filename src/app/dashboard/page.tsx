@@ -1,4 +1,4 @@
-import { auth, signOut } from "@/app/api/auth/[...nextauth]/route";
+import { auth, signOut } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";

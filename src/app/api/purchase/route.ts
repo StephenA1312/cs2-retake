@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth } from "../auth/[...nextauth]/route";
+import { auth } from "@/lib/auth";
 import { stripe, getOrCreateCustomer } from "@/lib/stripe";
 import { getDb } from "@/lib/db";
 import { users } from "@/db/schema";
