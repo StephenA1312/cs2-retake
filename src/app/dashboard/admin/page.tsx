@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function AdminPage() {
-  const { data: session } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
   const router = useRouter();
   const [steamId, setSteamId] = useState("");
   const [tier, setTier] = useState<"monthly" | "lifetime" | "free">("monthly");
@@ -41,9 +41,17 @@ export default function AdminPage() {
     }
   }
 
-  if (!session) {
+  if (sessionStatus === "unauthenticated") {
     router.push("/signin");
     return null;
+  }
+
+  if (sessionStatus === "loading") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <span className="size-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+      </div>
+    );
   }
 
   return (
