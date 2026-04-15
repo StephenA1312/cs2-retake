@@ -52,18 +52,11 @@ export default function AdminClient({ isAdmin }: { isAdmin: boolean }) {
   const [customersLoading, setCustomersLoading] = useState(false);
   const [customersError, setCustomersError] = useState<string | null>(null);
 
-  if (sessionStatus === "unauthenticated") {
-    router.push("/signin");
-    return null;
-  }
-
-  if (sessionStatus === "loading") {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <span className="size-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (sessionStatus === "unauthenticated") {
+      router.push("/signin");
+    }
+  }, [sessionStatus, router]);
 
   async function fetchCustomers() {
     setCustomersLoading(true);
@@ -84,10 +77,10 @@ export default function AdminClient({ isAdmin }: { isAdmin: boolean }) {
   }
 
   useEffect(() => {
-    if (activeTab === "customers" && customers.length === 0) {
+    if (activeTab === "customers" && customers.length === 0 && sessionStatus === "authenticated") {
       fetchCustomers();
     }
-  }, [activeTab]);
+  }, [activeTab, sessionStatus]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -131,6 +124,14 @@ export default function AdminClient({ isAdmin }: { isAdmin: boolean }) {
     if (res.ok) {
       setCustomers((prev) => prev.filter((c) => c.steamId !== steamIdToRevoke));
     }
+  }
+
+  if (sessionStatus === "loading" || sessionStatus === "unauthenticated") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <span className="size-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+      </div>
+    );
   }
 
   return (
