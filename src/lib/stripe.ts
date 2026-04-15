@@ -1,7 +1,22 @@
 import Stripe from "stripe";
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2026-03-25.dahlia",
+// Lazy singleton — defers instantiation until first use so the build phase
+// never evaluates this with a missing STRIPE_SECRET_KEY env var.
+let _stripe: Stripe | null = null;
+
+function getInstance(): Stripe {
+  if (!_stripe) {
+    _stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+      apiVersion: "2026-03-25.dahlia",
+    });
+  }
+  return _stripe;
+}
+
+export const stripe = new Proxy({} as Stripe, {
+  get(_, prop: string | symbol) {
+    return getInstance()[prop as keyof Stripe];
+  },
 });
 
 /** Finds the most recent active subscription for a given Steam ID, or null. */
