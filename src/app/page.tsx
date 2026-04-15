@@ -142,7 +142,7 @@ export default function Home() {
         <section className="pt-24 pb-12 sm:pt-28 sm:pb-14 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
           <div className="mx-auto max-w-5xl px-4 text-center sm:px-6 relative">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 rounded-none mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 rounded-none mb-6 animate-float">
               <span className="size-2 bg-primary rounded-full animate-pulse" />
               <span className="font-heading text-xs font-medium text-primary">SERVER ONLINE</span>
             </div>
@@ -183,7 +183,7 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Feature 1 */}
-              <div className="flex flex-col gap-4 p-6 bg-card border border-border">
+              <div className="flex flex-col gap-4 p-6 bg-card border border-border hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
                 <div className="size-10 bg-primary/10 flex items-center justify-center text-primary">
                   <IconZap className="size-5" />
                 </div>
@@ -191,7 +191,7 @@ export default function Home() {
                 <p className="text-xs text-muted-foreground">No waiting around. Get back into the action immediately after each round.</p>
               </div>
               {/* Feature 2 */}
-              <div className="flex flex-col gap-4 p-6 bg-card border border-border">
+              <div className="flex flex-col gap-4 p-6 bg-card border border-border hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
                 <div className="size-10 bg-primary/10 flex items-center justify-center text-primary">
                   <IconTarget className="size-5" />
                 </div>
@@ -199,7 +199,7 @@ export default function Home() {
                 <p className="text-xs text-muted-foreground">Smooth, responsive gameplay with consistent tick rate for precise shots.</p>
               </div>
               {/* Feature 3 */}
-              <div className="flex flex-col gap-4 p-6 bg-card border border-border">
+              <div className="flex flex-col gap-4 p-6 bg-card border border-border hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
                 <div className="size-10 bg-primary/10 flex items-center justify-center text-primary">
                   <IconTrophy className="size-5" />
                 </div>
@@ -207,7 +207,7 @@ export default function Home() {
                 <p className="text-xs text-muted-foreground">Level up and compete on the leaderboards. Every retake counts.</p>
               </div>
               {/* Feature 4 */}
-              <div className="flex flex-col gap-4 p-6 bg-card border border-border">
+              <div className="flex flex-col gap-4 p-6 bg-card border border-border hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
                 <div className="size-10 bg-primary/10 flex items-center justify-center text-primary">
                   <IconGlobe className="size-5" />
                 </div>
@@ -229,7 +229,7 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
               {/* Free */}
-              <div className="flex flex-col gap-4 overflow-hidden bg-card border border-border py-6 px-6">
+              <div className="flex flex-col gap-4 overflow-hidden bg-card border border-border py-6 px-6 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                 <div className="flex items-center gap-3">
                   <IconGlobe className="size-5 text-muted-foreground" />
                   <span className="font-heading text-base font-bold">Free</span>
@@ -299,7 +299,7 @@ export default function Home() {
                 </a>
               </div>
               {/* Lifetime VIP */}
-              <div className="flex flex-col gap-4 overflow-hidden bg-card border border-border py-6 px-6">
+              <div className="flex flex-col gap-4 overflow-hidden bg-card border border-border py-6 px-6 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                 <div className="flex items-center gap-3">
                   <IconCrown className="size-5 text-primary" />
                   <span className="font-heading text-base font-bold">VIP Lifetime</span>
