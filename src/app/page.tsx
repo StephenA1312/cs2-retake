@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 
 // Tabler icons as components
@@ -78,6 +78,26 @@ export default function Home() {
   const { data: session } = useSession();
   const [copied, setCopied] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const sectionRefs = useRef<(HTMLElement | null)[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
+
+    sectionRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const copyToClipboard = async () => {
     try {
@@ -140,7 +160,7 @@ export default function Home() {
       <main id="main">
         {/* Hero Section */}
         <section className="pt-24 pb-12 sm:pt-28 sm:pb-14 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent animate-gradient" />
           <div className="mx-auto max-w-5xl px-4 text-center sm:px-6 relative">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 rounded-none mb-6 animate-float">
               <span className="size-2 bg-primary rounded-full animate-pulse" />
@@ -174,7 +194,7 @@ export default function Home() {
         </section>
 
         {/* Why Play Here Section */}
-        <section id="features" className="py-8 sm:py-10 bg-muted/30">
+        <section id="features" ref={(el) => { sectionRefs.current[0] = el; }} className="py-8 sm:py-10 bg-muted/30 scroll-reveal">
           <div className="mx-auto max-w-5xl px-4 sm:px-6">
             <div className="mx-auto mb-6 max-w-2xl text-center">
               <h2 className="font-heading text-2xl font-bold tracking-tight sm:text-3xl">
@@ -219,7 +239,7 @@ export default function Home() {
         </section>
 
         {/* VIP Section */}
-        <section id="vip" className="py-8 sm:py-10">
+        <section id="vip" ref={(el) => { sectionRefs.current[1] = el; }} className="py-8 sm:py-10 scroll-reveal">
           <div className="mx-auto max-w-5xl px-4 sm:px-6">
             <div className="mx-auto mb-6 max-w-2xl text-center">
               <h2 className="font-heading text-2xl font-bold tracking-tight sm:text-3xl">
@@ -264,7 +284,7 @@ export default function Home() {
                 </a>
               </div>
               {/* Monthly VIP */}
-              <div className="flex flex-col gap-4 overflow-hidden bg-card border-2 border-primary/50 py-6 px-6">
+              <div className="flex flex-col gap-4 overflow-hidden bg-card border-2 border-primary/50 py-6 px-6 hover-glow hover:-translate-y-1 transition-all duration-300">
                 <div className="flex items-center gap-3">
                   <IconCrown className="size-5 text-primary" />
                   <span className="font-heading text-base font-bold">VIP Monthly</span>
@@ -338,7 +358,7 @@ export default function Home() {
         </section>
 
         {/* Server Info Section */}
-        <section id="server" className="py-8 sm:py-10 bg-muted/30">
+        <section id="server" ref={(el) => { sectionRefs.current[2] = el; }} className="py-8 sm:py-10 bg-muted/30 scroll-reveal">
           <div className="mx-auto max-w-5xl px-4 sm:px-6">
             <div className="mx-auto mb-6 max-w-2xl text-center">
               <h2 className="font-heading text-2xl font-bold tracking-tight sm:text-3xl">
@@ -378,7 +398,7 @@ export default function Home() {
         </section>
 
         {/* Discord CTA Section */}
-        <section className="py-8 sm:py-10">
+        <section ref={(el) => { sectionRefs.current[3] = el; }} className="py-8 sm:py-10 scroll-reveal">
           <div className="mx-auto max-w-5xl px-4 sm:px-6 text-center">
             <div className="size-16 bg-primary/10 flex items-center justify-center mx-auto mb-6 text-primary">
               <IconUsers className="size-8" />
