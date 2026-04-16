@@ -27,6 +27,10 @@ export async function POST(request: Request) {
   }
 
   try {
+    if (tier === "monthly" && !process.env.STRIPE_PRICE_MONTHLY) {
+      return NextResponse.json({ error: "STRIPE_PRICE_MONTHLY env var not set" }, { status: 500 });
+    }
+
     if (tier === "lifetime") {
       const paymentIntent = await stripe.paymentIntents.create({
         amount: 1500,
@@ -91,8 +95,11 @@ export async function POST(request: Request) {
       });
 
     return NextResponse.json({ clientSecret: paymentIntent.client_secret });
-  } catch (err) {
-    console.error("Stripe error:", err);
-    return NextResponse.json({ error: "Failed to create payment" }, { status: 500 });
+  } catch (err: any) {
+    console.error("Stripe error:", err?.message ?? err);
+    const msg = err?.type === "StripeInvalidRequestError"
+      ? err.message
+      : "Failed to create payment";
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
