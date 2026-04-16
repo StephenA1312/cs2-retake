@@ -222,10 +222,12 @@ export default function Home() {
             <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
                 onClick={copyToClipboard}
-                className="inline-flex items-center gap-2 bg-card hover:bg-muted border border-border text-foreground px-6 py-3 text-sm font-medium transition-colors w-full sm:w-auto justify-center"
+                className="inline-flex items-center gap-2 bg-card hover:bg-muted border border-border text-foreground px-6 py-3 text-sm font-medium transition-colors w-full sm:w-auto justify-center font-heading"
+                aria-label={`Copy server IP ${SERVER_IP}`}
               >
                 {copied ? <IconCheck className="size-4 text-primary" /> : <IconCopy className="size-4" />}
-                {copied ? "Copied!" : "Copy Server IP"}
+                <span className="text-muted-foreground">{copied ? "Copied" : "connect"}</span>
+                <span className="text-foreground">{SERVER_IP}</span>
               </button>
               <a
                 href="#vip"
@@ -234,9 +236,21 @@ export default function Home() {
                 Get VIP – $3/month
               </a>
             </div>
-            <p className="mt-4 font-heading text-xs text-muted-foreground">
-              {SERVER_IP}
-            </p>
+            {/* Server stats strip */}
+            <div className="mt-8 mx-auto max-w-xl grid grid-cols-3 border border-border bg-card/50 divide-x divide-border">
+              <div className="flex flex-col items-center py-3">
+                <span className="font-heading text-lg sm:text-xl font-bold tabular-nums">64<span className="text-muted-foreground">-tick</span></span>
+                <span className="font-heading text-[10px] uppercase tracking-wider text-muted-foreground mt-0.5">Tickrate</span>
+              </div>
+              <div className="flex flex-col items-center py-3">
+                <span className="font-heading text-lg sm:text-xl font-bold tabular-nums">10v10</span>
+                <span className="font-heading text-[10px] uppercase tracking-wider text-muted-foreground mt-0.5">Format</span>
+              </div>
+              <div className="flex flex-col items-center py-3">
+                <span className="font-heading text-lg sm:text-xl font-bold tabular-nums">Dallas</span>
+                <span className="font-heading text-[10px] uppercase tracking-wider text-muted-foreground mt-0.5">Region</span>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -249,9 +263,10 @@ export default function Home() {
               </h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* Feature 1 */}
-              <div className="flex flex-col gap-4 p-6 bg-card border border-border hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
-                <div className="size-10 bg-primary/10 flex items-center justify-center text-primary">
+              {/* Feature 1 — primary */}
+              <div className="relative flex flex-col gap-4 p-6 bg-card border border-primary/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
+                <span className="absolute top-0 right-0 bg-primary text-primary-foreground font-heading text-[9px] uppercase tracking-wider px-2 py-0.5">Core</span>
+                <div className="size-10 bg-primary flex items-center justify-center text-primary-foreground">
                   <IconZap className="size-5" />
                 </div>
                 <h3 className="font-heading text-sm font-bold">Instant Respawn</h3>
@@ -412,32 +427,39 @@ export default function Home() {
                 Server Info
               </h2>
             </div>
-            <div className="max-w-2xl mx-auto">
-              <div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
-                <div className="flex flex-col gap-2 p-4 bg-card border border-border text-center">
-                  <span className="font-heading text-xs text-muted-foreground uppercase tracking-wider">IP Address</span>
-                  <button
-                    onClick={copyToClipboard}
-                    className="font-heading text-sm font-bold text-primary hover:underline"
-                  >
-                    {copied ? "Copied!" : SERVER_IP}
-                  </button>
+            <div className="max-w-2xl mx-auto space-y-3">
+              {/* Prominent IP copy card */}
+              <button
+                onClick={copyToClipboard}
+                className="w-full flex flex-col sm:flex-row items-center sm:items-center justify-between gap-3 p-5 bg-card border border-primary/30 hover:border-primary/60 hover:bg-primary/5 transition-colors text-left group"
+                aria-label={`Copy server IP ${SERVER_IP}`}
+              >
+                <div className="flex flex-col gap-1">
+                  <span className="font-heading text-[10px] text-muted-foreground uppercase tracking-wider">Server Address</span>
+                  <span className="font-heading text-lg sm:text-xl font-bold text-primary">{SERVER_IP}</span>
                 </div>
-                <div className="flex flex-col gap-2 p-4 bg-card border border-border text-center">
-                  <span className="font-heading text-xs text-muted-foreground uppercase tracking-wider">Location</span>
+                <span className="inline-flex items-center gap-2 bg-muted group-hover:bg-primary group-hover:text-primary-foreground border border-border group-hover:border-primary px-4 py-2 text-xs font-medium font-heading transition-colors">
+                  {copied ? <IconCheck className="size-4" /> : <IconCopy className="size-4" />}
+                  {copied ? "Copied" : "Copy"}
+                </span>
+              </button>
+              {/* 4-stat grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="flex flex-col gap-1 p-4 bg-card border border-border text-center">
+                  <span className="font-heading text-[10px] text-muted-foreground uppercase tracking-wider">Location</span>
                   <span className="font-heading text-sm font-bold">Dallas, TX</span>
                 </div>
-                <div className="flex flex-col gap-2 p-4 bg-card border border-border text-center">
-                  <span className="font-heading text-xs text-muted-foreground uppercase tracking-wider">Tickrate</span>
+                <div className="flex flex-col gap-1 p-4 bg-card border border-border text-center">
+                  <span className="font-heading text-[10px] text-muted-foreground uppercase tracking-wider">Tickrate</span>
                   <span className="font-heading text-sm font-bold">64-tick</span>
                 </div>
-                <div className="flex flex-col gap-2 p-4 bg-card border border-border text-center">
-                  <span className="font-heading text-xs text-muted-foreground uppercase tracking-wider">Max Players</span>
-                  <span className="font-heading text-sm font-bold">10v10 (20)</span>
+                <div className="flex flex-col gap-1 p-4 bg-card border border-border text-center">
+                  <span className="font-heading text-[10px] text-muted-foreground uppercase tracking-wider">Players</span>
+                  <span className="font-heading text-sm font-bold">10v10</span>
                 </div>
-                <div className="flex flex-col gap-2 p-4 bg-card border border-border text-center col-span-2 sm:col-span-1">
-                  <span className="font-heading text-xs text-muted-foreground uppercase tracking-wider">Game Mode</span>
-                  <span className="font-heading text-sm font-bold">Retake | Competitive</span>
+                <div className="flex flex-col gap-1 p-4 bg-card border border-border text-center">
+                  <span className="font-heading text-[10px] text-muted-foreground uppercase tracking-wider">Mode</span>
+                  <span className="font-heading text-sm font-bold">Retake</span>
                 </div>
               </div>
             </div>
