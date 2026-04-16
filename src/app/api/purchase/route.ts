@@ -96,10 +96,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ clientSecret: paymentIntent.client_secret });
   } catch (err: any) {
-    console.error("Stripe error:", err?.message ?? err);
-    const msg = err?.type === "StripeInvalidRequestError"
-      ? err.message
-      : "Failed to create payment";
-    return NextResponse.json({ error: msg }, { status: 500 });
+    const errMsg = err?.message ?? String(err);
+    console.error("Stripe error:", errMsg);
+    return NextResponse.json({ error: errMsg }, { status: 500 });
   }
 }
