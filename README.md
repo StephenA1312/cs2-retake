@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# cs2retake
+
+A website for the **cs2retakes.com** Counter-Strike 2 retake server community — featuring Steam authentication, VIP subscriptions via Stripe, and a player dashboard.
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Auth**: NextAuth v5 with Steam OpenID
+- **Payments**: Stripe (subscriptions + one-time payments)
+- **Database**: Cloudflare D1 with Drizzle ORM
+- **Deployment**: Cloudflare Pages
+- **Styling**: Tailwind CSS v4
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+AUTH_SECRET=                # NextAuth secret (generate with: openssl rand -base64 32)
+AUTH_STEAM_ID=              # Steam OpenID Provider ID
+AUTH_STEAM_KEY=             # Steam API key
+STRIPE_SECRET_KEY=           # Stripe secret key
+STRIPE_PUBLISHABLE_KEY=      # Stripe publishable key
+STRIPE_WEBHOOK_SECRET=       # Stripe webhook signing secret
+NEXT_PUBLIC_STRIPE_KEY=      # Stripe publishable key (client-side)
+NEXT_PUBLIC_SERVER_IP=       # Game server IP (e.g. play.cs2retakes.com)
+NEXT_PUBLIC_DISCORD_URL=     # Discord invite URL
+NEXT_PUBLIC_PRICE_MONTHLY=   # Stripe price ID for monthly VIP
+NEXT_PUBLIC_PRICE_LIFETIME=  # Stripe price ID for lifetime VIP
+```
 
-## Learn More
+## Database
 
-To learn more about Next.js, take a look at the following resources:
+Schema is managed via Drizzle ORM with Cloudflare D1. Migrations are run via `wrangler d1 migrations`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Apply migrations locally
+wrangler d1 migrations apply cs2retake --local
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Apply migrations to production
+wrangler d1 migrations apply cs2retake --remote
+```
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Deployed on Cloudflare Pages via `@opennextjs/cloudflare`. The `cloudflare` adapter is preconfigured — push to `main` to deploy.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+# Preview deployment
+npm run build
+```
+
+## Features
+
+- **Steam Login** — Players authenticate via Steam OpenID; accounts are created/updated on each login
+- **VIP Subscriptions** — Monthly or lifetime VIP purchased via Stripe
+- **Player Dashboard** — View VIP status, server IP, and billing info
+- **Admin Panel** — Grant/revoke VIP access for users
+- **Billing Portal** — Cancel subscriptions and view payment history
