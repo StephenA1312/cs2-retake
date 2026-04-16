@@ -78,6 +78,7 @@ export default function Home() {
   const { data: session } = useSession();
   const [copied, setCopied] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
@@ -154,8 +155,54 @@ export default function Home() {
               Join Discord
             </a>
           </nav>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="sm:hidden inline-flex items-center justify-center size-10 text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Toggle menu"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {mobileMenuOpen ? (
+                <>
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </>
+              ) : (
+                <>
+                  <line x1="4" y1="8" x2="20" y2="8" />
+                  <line x1="4" y1="16" x2="20" y2="16" />
+                </>
+              )}
+            </svg>
+          </button>
         </div>
       </header>
+
+      {/* Mobile menu */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-x-0 top-16 z-40 bg-background border-b border-border sm:hidden">
+          <nav className="flex flex-col px-4 py-4 gap-3">
+            <a href="#features" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2">Features</a>
+            <a href="#vip" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2">VIP</a>
+            <a href="#server" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2">Server</a>
+            {session ? (
+              <a href="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2">
+                {session.user?.name ?? "Dashboard"}
+              </a>
+            ) : (
+              <a href="/signin" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2">Sign In</a>
+            )}
+            <a
+              href={DISCORD_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-4 py-2.5 text-sm font-medium hover:bg-primary/80 transition-colors mt-1"
+            >
+              <IconBrandDiscord className="size-4" />
+              Join Discord
+            </a>
+          </nav>
+        </div>
+      )}
 
       <main id="main">
         {/* Hero Section */}

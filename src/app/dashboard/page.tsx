@@ -1,19 +1,14 @@
-import { auth, signOut } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import Image from "next/image";
+import SignOutButton from "./SignOutButton";
+import CopyIpButton from "./CopyIpButton";
 
 const SERVER_IP = "play.cs2retakes.com";
 const DISCORD_URL = "https://discord.gg/cs2retakes";
-
-const IconCopy = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-  </svg>
-);
 
 const IconCrown = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -24,14 +19,6 @@ const IconCrown = () => (
 const IconDiscord = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
-  </svg>
-);
-
-const IconLogOut = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-    <polyline points="16 17 21 12 16 7" />
-    <line x1="21" y1="12" x2="9" y2="12" />
   </svg>
 );
 
@@ -71,11 +58,6 @@ export default async function Dashboard() {
   const isCanceling = hasVip && dbUser?.vipExpiresAt != null;
   const periodEnd = dbUser?.vipExpiresAt ?? null;
 
-  async function handleSignOut() {
-    "use server";
-    await signOut({ redirectTo: "/" });
-  }
-
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -84,15 +66,7 @@ export default async function Dashboard() {
           <a href="/" className="font-heading text-sm font-bold tracking-wider">
             <span className="text-primary">RET</span>AKES
           </a>
-          <form action={handleSignOut}>
-            <button
-              type="submit"
-              className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <IconLogOut />
-              Sign Out
-            </button>
-          </form>
+          <SignOutButton />
         </div>
       </header>
 
@@ -227,13 +201,7 @@ export default async function Dashboard() {
             Quick Actions
           </h2>
           <div className="flex flex-wrap gap-3">
-            <button
-              className="inline-flex items-center gap-2 bg-card border border-border text-foreground px-4 py-2 text-xs font-medium hover:bg-muted transition-colors copy-ip-btn"
-              data-ip={SERVER_IP}
-            >
-              <IconCopy />
-              Copy Server IP
-            </button>
+            <CopyIpButton ip={SERVER_IP} />
             <a
               href={DISCORD_URL}
               target="_blank"
@@ -266,25 +234,6 @@ export default async function Dashboard() {
           </div>
         </div>
       </main>
-      <CopyIpScript />
     </div>
-  );
-}
-
-function CopyIpScript() {
-  return (
-    <script
-      dangerouslySetInnerHTML={{
-        __html: `
-          document.querySelector('.copy-ip-btn')?.addEventListener('click', function() {
-            navigator.clipboard.writeText(this.dataset.ip).then(() => {
-              const orig = this.innerHTML;
-              this.textContent = 'Copied!';
-              setTimeout(() => { this.innerHTML = orig; }, 2000);
-            });
-          });
-        `,
-      }}
-    />
   );
 }

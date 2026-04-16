@@ -26,37 +26,45 @@ export default async function BillingPage() {
   const periodEnd = dbUser?.vipExpiresAt ? formatDate(dbUser.vipExpiresAt) : null;
   const amount = dbUser?.vipTier === "monthly" ? "$3/month" : null;
 
-  async function cancelSubscription(formData: FormData) {
+  async function cancelSubscription() {
     "use server";
-    const subId = formData.get("subscriptionId") as string;
-    if (!subId) return;
-
-    const updated = await stripe.subscriptions.update(subId, { cancel_at_period_end: true });
-    const newPeriodEnd = updated.items.data[0]?.current_period_end ?? null;
+    const session2 = await auth();
+    if (!session2?.user) return;
+    const sid = (session2.user as any)?.id ?? "";
 
     const db2 = await getDb();
+    const row = await db2.select().from(users).where(eq(users.steamId, sid)).get();
+    if (!row?.stripeSubscriptionId) return;
+
+    const updated = await stripe.subscriptions.update(row.stripeSubscriptionId, { cancel_at_period_end: true });
+    const newPeriodEnd = updated.items.data[0]?.current_period_end ?? null;
+
     const now = Math.floor(Date.now() / 1000);
     await db2
       .update(users)
       .set({ vipExpiresAt: newPeriodEnd, updatedAt: now })
-      .where(eq(users.steamId, steamId));
+      .where(eq(users.steamId, sid));
 
     redirect("/dashboard/billing");
   }
 
-  async function resumeSubscription(formData: FormData) {
+  async function resumeSubscription() {
     "use server";
-    const subId = formData.get("subscriptionId") as string;
-    if (!subId) return;
-
-    await stripe.subscriptions.update(subId, { cancel_at_period_end: false });
+    const session2 = await auth();
+    if (!session2?.user) return;
+    const sid = (session2.user as any)?.id ?? "";
 
     const db2 = await getDb();
+    const row = await db2.select().from(users).where(eq(users.steamId, sid)).get();
+    if (!row?.stripeSubscriptionId) return;
+
+    await stripe.subscriptions.update(row.stripeSubscriptionId, { cancel_at_period_end: false });
+
     const now = Math.floor(Date.now() / 1000);
     await db2
       .update(users)
       .set({ vipExpiresAt: null, updatedAt: now })
-      .where(eq(users.steamId, steamId));
+      .where(eq(users.steamId, sid));
 
     redirect("/dashboard/billing");
   }
@@ -137,7 +145,6 @@ export default async function BillingPage() {
                           VIP access continues until {periodEnd}, then expires.
                         </p>
                         <form action={resumeSubscription}>
-                          <input type="hidden" name="subscriptionId" value={dbUser.stripeSubscriptionId} />
                           <button
                             type="submit"
                             className="w-full bg-primary text-primary-foreground px-4 py-2.5 text-xs font-medium hover:bg-primary/80 transition-colors"
@@ -152,7 +159,6 @@ export default async function BillingPage() {
                           Canceling keeps VIP active until {periodEnd} — it won&apos;t renew after that.
                         </p>
                         <form action={cancelSubscription}>
-                          <input type="hidden" name="subscriptionId" value={dbUser.stripeSubscriptionId} />
                           <button
                             type="submit"
                             className="w-full border border-red-500/30 text-red-400 px-4 py-2.5 text-xs font-medium hover:bg-red-500/10 transition-colors"
