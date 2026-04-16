@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const IconBrandDiscord = ({ className = "size-5" }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -18,23 +18,8 @@ const IconArrowLeft = ({ className = "size-5" }: { className?: string }) => (
 export default function SignIn() {
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    // Check for redirect cookie after Steam auth completes
-    const match = document.cookie.match(/auth-redirect=([^;]+)/);
-    if (match) {
-      const redirect = decodeURIComponent(match[1]);
-      // Delete the cookie
-      document.cookie = "auth-redirect=;path=/;max-age=0";
-      // Redirect to intended page
-      window.location.href = redirect;
-    }
-  }, []);
-
   const handleSteamSignIn = async () => {
     setLoading(true);
-    const redirect = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("redirect") || "/" : "/";
-    // Store redirect in cookie so we can use it after Steam auth completes
-    document.cookie = `auth-redirect=${encodeURIComponent(redirect)};path=/;max-age=300`;
     window.location.href = `/api/auth/steam`;
   };
 

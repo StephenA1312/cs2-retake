@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 // Tabler icons as components
 const IconCopy = ({ className = "size-4" }: { className?: string }) => (
