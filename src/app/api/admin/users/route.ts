@@ -1,21 +1,12 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { users } from "@/db/schema";
 import { isNotNull, asc } from "drizzle-orm";
-
-const ADMIN_STEAM_IDS = (process.env.ADMIN_STEAM_IDS ?? "").split(",").filter(Boolean);
+import { requireAdmin } from "@/lib/admin-guard";
 
 export async function GET() {
-  const session = await auth();
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const steamId = (session.user as any)?.id ?? "";
-  if (!ADMIN_STEAM_IDS.includes(steamId)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  const guard = await requireAdmin();
+  if (!guard.ok) return guard.response;
 
   try {
     const db = await getDb();

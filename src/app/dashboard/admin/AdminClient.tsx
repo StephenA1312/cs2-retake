@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import DashboardTab from "./DashboardTab";
 
-type Tab = "override" | "customers";
+type Tab = "dashboard" | "override" | "customers";
 
 interface Customer {
   steamId: string;
@@ -30,6 +31,13 @@ const IconUsers = ({ className = "size-4" }: { className?: string }) => (
   </svg>
 );
 
+const IconChart = ({ className = "size-4" }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M3 3v18h18" />
+    <path d="M7 15l4-4 4 4 5-6" />
+  </svg>
+);
+
 function formatDate(ts: number | null) {
   if (!ts) return "Never";
   return new Date(ts * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
@@ -38,7 +46,7 @@ function formatDate(ts: number | null) {
 export default function AdminClient({ isAdmin }: { isAdmin: boolean }) {
   const { status: sessionStatus } = useSession();
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<Tab>("override");
+  const [activeTab, setActiveTab] = useState<Tab>(isAdmin ? "dashboard" : "override");
 
   // Override form state
   const [steamId, setSteamId] = useState("");
@@ -161,6 +169,19 @@ export default function AdminClient({ isAdmin }: { isAdmin: boolean }) {
 
         {/* Tabs */}
         <div className="flex gap-1 mb-8 border-b border-border">
+          {isAdmin && (
+            <button
+              onClick={() => setActiveTab("dashboard")}
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-medium border-b-2 -mb-px transition-colors ${
+                activeTab === "dashboard"
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <IconChart className="size-3.5" />
+              Dashboard
+            </button>
+          )}
           <button
             onClick={() => setActiveTab("override")}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-medium border-b-2 -mb-px transition-colors ${
@@ -184,6 +205,8 @@ export default function AdminClient({ isAdmin }: { isAdmin: boolean }) {
             Active Customers
           </button>
         </div>
+
+        {activeTab === "dashboard" && isAdmin && <DashboardTab />}
 
         {/* Override Tab */}
         {activeTab === "override" && (

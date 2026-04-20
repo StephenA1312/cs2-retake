@@ -1,20 +1,11 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
-import { users } from "@/db/schema";
-
-const ADMIN_STEAM_IDS = (process.env.ADMIN_STEAM_IDS ?? "").split(",").filter(Boolean);
+import { users, vipEvents } from "@/db/schema";
+import { requireAdmin } from "@/lib/admin-guard";
 
 export async function POST(request: Request) {
-  const session = await auth();
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const steamId = (session.user as any)?.id ?? "";
-  if (!ADMIN_STEAM_IDS.includes(steamId)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  const guard = await requireAdmin();
+  if (!guard.ok) return guard.response;
 
   const { targetSteamId, vipTier, vipExpiresAt } = await request.json();
   if (!targetSteamId || !vipTier) {
@@ -34,11 +25,13 @@ export async function POST(request: Request) {
           ? Math.floor(new Date(vipExpiresAt).getTime() / 1000)
           : null;
 
+    const newTier = vipTier === "free" ? null : vipTier;
+
     await db
       .insert(users)
       .values({
         steamId: targetSteamId,
-        vipTier: vipTier === "free" ? null : vipTier,
+        vipTier: newTier,
         vipExpiresAt: expiresAt,
         createdAt: now,
         updatedAt: now,
@@ -46,11 +39,19 @@ export async function POST(request: Request) {
       .onConflictDoUpdate({
         target: users.steamId,
         set: {
-          vipTier: vipTier === "free" ? null : vipTier,
+          vipTier: newTier,
           vipExpiresAt: expiresAt,
           updatedAt: now,
         },
       });
+
+    await db.insert(vipEvents).values({
+      steamId: targetSteamId,
+      eventType: newTier ? "granted" : "revoked",
+      tier: newTier,
+      source: "admin",
+      createdAt: now,
+    });
 
     return NextResponse.json({ success: true });
   } catch (err) {

@@ -15,3 +15,17 @@ export const users = sqliteTable("users", {
 });
 
 export type User = typeof users.$inferSelect;
+
+export const vipEvents = sqliteTable("vip_events", {
+  id:        integer("id").primaryKey({ autoIncrement: true }),
+  steamId:   text("steam_id").notNull(),
+  // 'granted' | 'revoked' | 'renewed' | 'expired'
+  eventType: text("event_type").notNull(),
+  // 'monthly' | 'lifetime' | null
+  tier:      text("tier"),
+  // 'stripe' | 'admin' | 'backfill'
+  source:    text("source").notNull(),
+  createdAt: integer("created_at").notNull(),
+});
+
+export type VipEvent = typeof vipEvents.$inferSelect;

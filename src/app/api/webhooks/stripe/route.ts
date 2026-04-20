@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { getDb } from "@/lib/db";
-import { users } from "@/db/schema";
+import { users, vipEvents } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import Stripe from "stripe";
 
@@ -33,6 +33,13 @@ export async function POST(req: NextRequest) {
         const isActive = sub.status === "active" && !sub.cancel_at_period_end;
         const isCanceling = sub.status === "active" && sub.cancel_at_period_end;
 
+        const prior = await db
+          .select({ vipTier: users.vipTier })
+          .from(users)
+          .where(eq(users.steamId, steamId))
+          .limit(1);
+        const priorTier = prior[0]?.vipTier ?? null;
+
         await db
           .insert(users)
           .values({
@@ -54,6 +61,16 @@ export async function POST(req: NextRequest) {
               updatedAt: now,
             },
           });
+
+        if (event.type === "customer.subscription.created" && priorTier !== "monthly") {
+          await db.insert(vipEvents).values({
+            steamId, eventType: "granted", tier: "monthly", source: "stripe", createdAt: now,
+          });
+        } else if (event.type === "customer.subscription.updated" && isActive && !isCanceling && priorTier === "monthly") {
+          await db.insert(vipEvents).values({
+            steamId, eventType: "renewed", tier: "monthly", source: "stripe", createdAt: now,
+          });
+        }
         break;
       }
 
@@ -66,6 +83,10 @@ export async function POST(req: NextRequest) {
           .update(users)
           .set({ vipTier: null, vipExpiresAt: null, stripeSubscriptionId: null, updatedAt: now })
           .where(eq(users.steamId, steamId));
+
+        await db.insert(vipEvents).values({
+          steamId, eventType: "revoked", tier: "monthly", source: "stripe", createdAt: now,
+        });
         break;
       }
 
@@ -74,6 +95,13 @@ export async function POST(req: NextRequest) {
         const steamId = pi.metadata?.steamId;
         const tier = pi.metadata?.tier;
         if (!steamId || tier !== "lifetime") break;
+
+        const prior = await db
+          .select({ vipTier: users.vipTier })
+          .from(users)
+          .where(eq(users.steamId, steamId))
+          .limit(1);
+        const priorTier = prior[0]?.vipTier ?? null;
 
         await db
           .insert(users)
@@ -93,6 +121,12 @@ export async function POST(req: NextRequest) {
               updatedAt: now,
             },
           });
+
+        if (priorTier !== "lifetime") {
+          await db.insert(vipEvents).values({
+            steamId, eventType: "granted", tier: "lifetime", source: "stripe", createdAt: now,
+          });
+        }
         break;
       }
     }
