@@ -10,7 +10,10 @@ export async function GET(req: Request) {
 
   const url = new URL(req.url);
   const days = Math.max(1, Math.min(365, Number(url.searchParams.get("days") ?? 30)));
-  const since = Math.floor(Date.now() / 1000) - days * 86400;
+  const now = Math.floor(Date.now() / 1000);
+  // Build buckets aligned to UTC day boundaries and include the current day.
+  const startOfToday = Math.floor(now / 86400) * 86400;
+  const since = startOfToday - (days - 1) * 86400;
 
   try {
     const db = await getDb();
