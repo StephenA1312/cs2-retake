@@ -59,6 +59,11 @@ export default function AdminClient({ isAdmin }: { isAdmin: boolean }) {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [customersLoading, setCustomersLoading] = useState(false);
   const [customersError, setCustomersError] = useState<string | null>(null);
+  const [customerFilter, setCustomerFilter] = useState("");
+
+  const filteredCustomers = customerFilter.trim()
+    ? customers.filter((c) => c.steamId.includes(customerFilter.trim()))
+    : customers;
 
   useEffect(() => {
     if (sessionStatus === "unauthenticated") {
@@ -299,6 +304,14 @@ export default function AdminClient({ isAdmin }: { isAdmin: boolean }) {
         {/* Active Customers Tab */}
         {activeTab === "customers" && (
           <div className="space-y-4">
+            <input
+              type="text"
+              value={customerFilter}
+              onChange={(e) => setCustomerFilter(e.target.value)}
+              placeholder="Filter by Steam ID..."
+              className="w-full bg-muted border border-border px-4 py-2.5 text-xs font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+            />
+
             {customersLoading && (
               <div className="flex items-center justify-center py-12">
                 <span className="size-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
@@ -317,7 +330,13 @@ export default function AdminClient({ isAdmin }: { isAdmin: boolean }) {
               </div>
             )}
 
-            {!customersLoading && customers.length > 0 && (
+            {!customersLoading && customers.length > 0 && filteredCustomers.length === 0 && (
+              <div className="p-6 bg-card border border-border text-center text-xs text-muted-foreground">
+                No customers match &quot;{customerFilter}&quot;
+              </div>
+            )}
+
+            {!customersLoading && filteredCustomers.length > 0 && (
               <div className="bg-card border border-border overflow-hidden">
                 <table className="w-full text-xs">
                   <thead>
@@ -330,7 +349,7 @@ export default function AdminClient({ isAdmin }: { isAdmin: boolean }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {customers.map((customer) => (
+                    {filteredCustomers.map((customer) => (
                       <tr key={customer.steamId} className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
                         <td className="px-4 py-3 font-medium">
                           {customer.steamName ?? "—"}
@@ -373,7 +392,9 @@ export default function AdminClient({ isAdmin }: { isAdmin: boolean }) {
 
             <div className="flex justify-between items-center">
               <p className="text-xs text-muted-foreground">
-                {customers.length} active customer{customers.length !== 1 ? "s" : ""}
+                {customerFilter.trim()
+                  ? `${filteredCustomers.length} of ${customers.length} customer${customers.length !== 1 ? "s" : ""}`
+                  : `${customers.length} active customer${customers.length !== 1 ? "s" : ""}`}
               </p>
               <button
                 onClick={fetchCustomers}
