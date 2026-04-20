@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { StatCard, Card } from "@/components/tremor/Card";
+import { AreaChart } from "@/components/tremor/AreaChart";
 import { BarChart } from "@/components/tremor/BarChart";
 
 type Overview = { activeMonthly: number; activeLifetime: number; expiringSoon: number; newThisWeek: number };
@@ -100,13 +101,7 @@ export default function DashboardTab() {
           </div>
         </div>
         {series ? (
-          <BarChart
-            data={chartData}
-            categories={["granted", "revoked", "renewed"]}
-            index="date"
-            colors={["#22c55e", "#ef4444", "#3b82f6"]}
-            height={240}
-          />
+          <AreaChart data={chartData} categories={["granted", "revoked", "renewed"]} index="date" />
         ) : (
           <div className="h-[240px] bg-muted/20 animate-pulse" />
         )}
