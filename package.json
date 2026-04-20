@@ -9,17 +9,21 @@
     "deploy": "npm run build:cf && wrangler pages deploy",
     "start": "next start",
     "lint": "eslint",
-    "db:migrate": "wrangler d1 execute cs2retake --remote --file=migrations/001_users.sql"
+    "db:migrate": "wrangler d1 execute cs2retake --remote --file=migrations/001_users.sql && wrangler d1 execute cs2retake --remote --file=migrations/002_vip_events.sql",
+    "db:migrate:local": "wrangler d1 execute cs2retake --local --file=migrations/001_users.sql && wrangler d1 execute cs2retake --local --file=migrations/002_vip_events.sql"
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^6.2.0",
     "@stripe/stripe-js": "^9.2.0",
+    "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.2",
     "next": "^15.5.15",
     "next-auth": "^5.0.0-beta.31",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "stripe": "^22.0.1"
+    "recharts": "^3.8.1",
+    "stripe": "^22.0.1",
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
     "@opennextjs/cloudflare": "^1.19.1",
