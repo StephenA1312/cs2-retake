@@ -71,7 +71,7 @@ const IconCrown = ({ className = "size-5" }: { className?: string }) => (
   </svg>
 );
 
-const SERVER_IP = "play.cs2retakes.com";
+const SERVER_IP = "play.403.com";
 const DISCORD_URL = "https://discord.gg/ejBw3fXHZe";
 
 export default function Home() {

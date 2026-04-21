@@ -7,7 +7,7 @@ import Image from "next/image";
 import SignOutButton from "./SignOutButton";
 import CopyIpButton from "./CopyIpButton";
 
-const SERVER_IP = "play.cs2retakes.com";
+const SERVER_IP = "play.403.com";
 const DISCORD_URL = "https://discord.gg/ejBw3fXHZe";
 
 const IconCrown = () => (
