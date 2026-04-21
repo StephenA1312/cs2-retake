@@ -72,7 +72,7 @@ const IconCrown = ({ className = "size-5" }: { className?: string }) => (
 );
 
 const SERVER_IP = "play.cs2retakes.com";
-const DISCORD_URL = "https://discord.gg/cs2retakes";
+const DISCORD_URL = "https://discord.gg/ejBw3fXHZe";
 
 export default function Home() {
   const { data: session } = useSession();
