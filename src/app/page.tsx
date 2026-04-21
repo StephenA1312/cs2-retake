@@ -243,7 +243,7 @@ export default function Home() {
                 <span className="font-heading text-[10px] uppercase tracking-wider text-muted-foreground mt-0.5">Tickrate</span>
               </div>
               <div className="flex flex-col items-center py-3">
-                <span className="font-heading text-lg sm:text-xl font-bold tabular-nums">10v10</span>
+                <span className="font-heading text-lg sm:text-xl font-bold tabular-nums">5v4</span>
                 <span className="font-heading text-[10px] uppercase tracking-wider text-muted-foreground mt-0.5">Format</span>
               </div>
               <div className="flex flex-col items-center py-3">
@@ -455,7 +455,7 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col gap-1 p-4 bg-card border border-border text-center">
                   <span className="font-heading text-[10px] text-muted-foreground uppercase tracking-wider">Players</span>
-                  <span className="font-heading text-sm font-bold">10v10</span>
+                  <span className="font-heading text-sm font-bold">5v4</span>
                 </div>
                 <div className="flex flex-col gap-1 p-4 bg-card border border-border text-center">
                   <span className="font-heading text-[10px] text-muted-foreground uppercase tracking-wider">Mode</span>
