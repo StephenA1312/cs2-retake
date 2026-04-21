@@ -10,8 +10,8 @@ const bbManualMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RETAKES - The Fastest CS2 Retake Server",
-  description: "Join the fastest CS2 retakes server. Low ping, zero lag, 64-tick gameplay. Get VIP for exclusive perks including knife skins and XP boost.",
+  title: "RetakeBase - The Fastest CS2 Retake Server",
+  description: "Join RetakeBase, the fastest CS2 retakes server. Low ping, zero lag, 64-tick gameplay. Get VIP for exclusive perks including knife skins and XP boost.",
 };
 
 export const viewport: Viewport = {
