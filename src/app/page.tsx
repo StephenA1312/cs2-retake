@@ -132,7 +132,7 @@ export default function Home() {
       <header className="fixed top-0 inset-x-0 z-50 transition-colors duration-300 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <a href="#" className="font-heading text-sm font-bold tracking-wider">
-            <span className="text-primary">RET</span>AKES
+            <span className="text-primary">Retake</span>Base
           </a>
           <nav className="hidden sm:flex items-center gap-6">
             <a href="#features" className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">Features</a>
@@ -214,7 +214,7 @@ export default function Home() {
               <span className="font-heading text-xs font-medium text-primary">SERVER ONLINE</span>
             </div>
             <h1 className="font-heading text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl leading-tight">
-              <span className="text-primary">RET</span>AKES
+              <span className="text-primary">Retake</span>Base
             </h1>
             <p className="mx-auto mt-4 max-w-xl text-muted-foreground text-sm sm:text-base">
               The Fastest CS2 Retakes Server – Low Ping, Zero Lag
@@ -504,7 +504,7 @@ export default function Home() {
               <a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Privacy</a>
             </div>
             <p className="text-xs text-muted-foreground">
-              © 2026 RETAKES. All rights reserved.
+              © 2026 RetakeBase. All rights reserved.
             </p>
           </div>
         </div>
