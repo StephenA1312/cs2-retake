@@ -26,7 +26,7 @@ export default function SignIn() {
 
       <div className="w-full max-w-sm text-center">
         <h1 className="font-heading text-3xl font-bold tracking-tight mb-2">
-          <span className="text-primary">RET</span>AKES
+          <span className="text-primary">Retake</span>Base
         </h1>
         <p className="text-sm text-muted-foreground mb-8">
           Sign in with Steam to get started
