@@ -169,7 +169,7 @@ function BuyPageInner() {
         <div className="text-center mb-8">
           <p className="font-heading text-xs text-muted-foreground uppercase tracking-wider mb-2">Secure Checkout</p>
           <h1 className="font-heading text-2xl font-bold">
-            <span className="text-primary">RET</span>AKES VIP
+            <span className="text-primary">Retake</span>Base VIP
           </h1>
         </div>
 
